@@ -20,7 +20,7 @@ jobs:
 
       - name: Extract Android project
         run: |
-          unzip -q SBS_International_Group_Hub_V1_SOURCE_FINAL.zip -d extracted
+          unzip -q SBS_International_Group_Hub_V1_SOURCE.zip -d extracted
           test -f extracted/SBS_International_Group_Hub_V1/settings.gradle
 
       - name: Set up Java
