@@ -1,0 +1,49 @@
+
+name: Build SBS International Group Hub APK
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract Android project
+        run: |
+          unzip -q SBS_International_Group_Hub_V1_SOURCE.zip -d extracted
+          test -f extracted/SBS_International_Group_Hub_V1/settings.gradle
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: Build debug APK
+        working-directory: extracted/SBS_International_Group_Hub_V1
+        run: gradle assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: SBS-International-Group-Hub-APK
+          path: extracted/SBS_International_Group_Hub_V1/app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
